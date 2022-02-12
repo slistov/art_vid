@@ -5,7 +5,7 @@ from django.forms import CharField, URLField
 
 
 class User(models.Model):
-    id = models.IntegerField()
+    id = models.IntegerField(primary_key=True)
     email = models.CharField(max_length=250)
     password = models.CharField(max_length=100)
 
@@ -14,8 +14,8 @@ class User(models.Model):
 
 
 class Article(models.Model):
-    id = models.IntegerField()
-    user_id = models.ForeignKey(User, on_delete=CASCADE)
+    id = models.IntegerField(primary_key=True)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     name = CharField(max_length=250)
     article = Text()
 
@@ -24,8 +24,8 @@ class Article(models.Model):
 
 
 class Video(models.Model):
-    id = models.IntegerField()
-    user_id = models.ForeignKey(User, on_delete=CASCADE)
+    id = models.IntegerField(primary_key=True)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     name = CharField(max_length=250)
     url = URLField()
 
@@ -34,8 +34,8 @@ class Video(models.Model):
 
 
 class Comment(models.Model):
-    id = models.IntegerField()
-    user_id = models.ForeignKey(User, on_delete=CASCADE)
+    id = models.IntegerField(primary_key=True)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     name = CharField(max_length=250)
     article = Text()
 
