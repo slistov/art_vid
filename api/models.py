@@ -10,14 +10,14 @@ class User(models.Model):
     password = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.id + self.email
+        return self.email
 
 
 class Article(models.Model):
     id = models.IntegerField(primary_key=True)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = CharField(max_length=250)
-    article = Text()
+    name = models.CharField(default='', max_length=250)
+    article = models.TextField(default='')
 
     def __str__(self):
         return self.name
@@ -26,8 +26,8 @@ class Article(models.Model):
 class Video(models.Model):
     id = models.IntegerField(primary_key=True)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = CharField(max_length=250)
-    url = URLField()
+    name = models.CharField(default='', max_length=250)
+    url = models.URLField(default='')
 
     def __str__(self):
         return self.name
@@ -36,8 +36,8 @@ class Video(models.Model):
 class Comment(models.Model):
     id = models.IntegerField(primary_key=True)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = CharField(max_length=250)
-    article = Text()
+    type = models.TextChoices('Для статьи или для видео?', 'Article Video')
+    comment = models.TextField('Текст комментария', default='')
 
     def __str__(self):
         return self.name

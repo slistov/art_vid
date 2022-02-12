@@ -22,3 +22,12 @@ class VideoViewSet(viewsets.ModelViewSet):
     queryset = Video.objects.all().order_by('-id')
     serializer_class = VideoSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+class CommentViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows comment to be viewed or edited.
+    """
+    queryset = Video.objects.all().order_by('id')
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticated]
