@@ -1,0 +1,1 @@
+User writes article, makes video and comments
