@@ -17,6 +17,7 @@ class VideoSerializer(serializers.ModelSerializer):
         model = Video
         fields = ['id', 'user_id', 'name', 'url']
 
+
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment

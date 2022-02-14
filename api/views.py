@@ -3,8 +3,9 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
 from rest_framework import permissions
-from api.models import Article, Video
+from api.models import Article, Video, Comment
 from api.serializers import ArticleSerializer, VideoSerializer, CommentSerializer
+
 
 class ArticleViewSet(viewsets.ModelViewSet):
     """
@@ -26,8 +27,9 @@ class VideoViewSet(viewsets.ModelViewSet):
 
 class CommentViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows comment to be viewed or edited.
+    API endpoint that allows video to be viewed or edited.
     """
-    queryset = Video.objects.all().order_by('id')
+    queryset = Comment.objects.all().order_by('id')
     serializer_class = CommentSerializer
     permission_classes = [permissions.IsAuthenticated]
+

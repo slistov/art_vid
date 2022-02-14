@@ -36,8 +36,9 @@ class Video(models.Model):
 class Comment(models.Model):
     id = models.IntegerField(primary_key=True)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    type = models.TextChoices('Для статьи или для видео?', 'Article Video')
+    parent_type = models.TextChoices('Для статьи или для видео?', 'Article Video')
+    
     comment = models.TextField('Текст комментария', default='')
 
     def __str__(self):
-        return self.name
+        return self.comment
