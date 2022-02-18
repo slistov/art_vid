@@ -1,19 +1,17 @@
-from tkinter import CASCADE, Text
-from typing import cast
 from django.db import models
-from django.forms import CharField, URLField
 
+from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.fields import GenericRelation
 from django.contrib.contenttypes.models import ContentType
 
 
-class User(models.Model):
-    email = models.CharField(max_length=250)
-    password = models.CharField(max_length=100)
+# class User(models.Model):
+#     email = models.CharField(max_length=250)
+#     password = models.CharField(max_length=100)
 
-    def __str__(self):
-        return self.email
+#     def __str__(self):
+#         return self.email
 
 
 class Article(models.Model):
