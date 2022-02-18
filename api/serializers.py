@@ -8,9 +8,14 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class ArticleSerializer(serializers.ModelSerializer):
+    comments = serializers.SlugRelatedField(
+        many=True,
+        read_only=True,
+        slug_field='comment'
+    )
     class Meta:
         model = Article
-        fields = ['id', 'user_id', 'name', 'article']
+        fields = ['id', 'user_id', 'name', 'article', 'comments']
 
 class VideoSerializer(serializers.ModelSerializer):
     class Meta:
