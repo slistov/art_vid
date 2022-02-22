@@ -15,6 +15,9 @@ class ArticleSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(
         default=serializers.CurrentUserDefault()
     )
+    user_id = serializers.IntegerField(
+        read_only=True
+    )
     comments = serializers.SlugRelatedField(
         many=True,
         read_only=True,
@@ -22,7 +25,7 @@ class ArticleSerializer(serializers.ModelSerializer):
     )
     class Meta:
         model = Article
-        fields = ['id', 'user', 'name', 'article', 'comments']
+        fields = ['id', 'user', 'user_id', 'name', 'article', 'comments']
 
 class VideoSerializer(serializers.ModelSerializer):
     class Meta:

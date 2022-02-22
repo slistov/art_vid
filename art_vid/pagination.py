@@ -1,8 +1,8 @@
-from mmap import PAGESIZE
 from rest_framework import pagination # PageNumberPagination
 
 
 class CustomPagination(pagination.PageNumberPagination):
+    page_size_query_param = 'limit'
     def get_paginated_response(self, data):
         return pagination.Response({
             'data': data,
