@@ -1,13 +1,20 @@
 from rest_framework import serializers
-from api.models import User, Article, Video, Comment
+from api.models import Article, Video, Comment
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['id', 'email', 'password']
+# class CurrentUserDefault(object):
+#     def set_context(self, serializer_field):
+#         self.user_id = serializer_field.context['request'].user.id
 
+#     def __call__(self):
+#         return self.user_id
+
+#     def __repr__(self):
+#         return unicode_to_repr('%s()' % self.__class__.__name__)
 
 class ArticleSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(
+        default=serializers.CurrentUserDefault()
+    )
     comments = serializers.SlugRelatedField(
         many=True,
         read_only=True,
@@ -15,7 +22,7 @@ class ArticleSerializer(serializers.ModelSerializer):
     )
     class Meta:
         model = Article
-        fields = ['id', 'user_id', 'name', 'article', 'comments']
+        fields = ['id', 'user', 'name', 'article', 'comments']
 
 class VideoSerializer(serializers.ModelSerializer):
     class Meta:
