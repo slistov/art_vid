@@ -19,7 +19,7 @@ from django.urls import include, path
 from rest_framework import routers
 from api import views
 
-router = routers.DefaultRouter()
+router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'articles', views.ArticleViewSet)
 router.register(r'videos', views.VideoViewSet)
 router.register(r'comments', views.CommentViewSet)

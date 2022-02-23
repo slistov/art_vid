@@ -11,26 +11,32 @@ from api.models import Article, Video, Comment
 #     def __repr__(self):
 #         return unicode_to_repr('%s()' % self.__class__.__name__)
 
-class ArticleSerializer(serializers.ModelSerializer):
+class ItemOwnedByUser(serializers.ModelSerializer):
     user = serializers.HiddenField(
         default=serializers.CurrentUserDefault()
     )
+    
     user_id = serializers.IntegerField(
         read_only=True
     )
+
     comments = serializers.SlugRelatedField(
         many=True,
         read_only=True,
         slug_field='comment'
     )
+
+
+class ArticleSerializer(ItemOwnedByUser):
     class Meta:
         model = Article
         fields = ['id', 'user', 'user_id', 'name', 'article', 'comments']
 
-class VideoSerializer(serializers.ModelSerializer):
+
+class VideoSerializer(ItemOwnedByUser):
     class Meta:
         model = Video
-        fields = ['id', 'user_id', 'name', 'url']
+        fields = ['id', 'user', 'user_id', 'name', 'url', 'comments']
 
 
 class CommentSerializer(serializers.ModelSerializer):
