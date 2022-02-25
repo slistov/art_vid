@@ -1,15 +1,8 @@
 from rest_framework import serializers
 from api.models import Article, Video, Comment
+from django.contrib.contenttypes.models import ContentType
 
-# class CurrentUserDefault(object):
-#     def set_context(self, serializer_field):
-#         self.user_id = serializer_field.context['request'].user.id
 
-#     def __call__(self):
-#         return self.user_id
-
-#     def __repr__(self):
-#         return unicode_to_repr('%s()' % self.__class__.__name__)
 
 class ItemOwnedByUser(serializers.ModelSerializer):
     user = serializers.HiddenField(
@@ -20,6 +13,7 @@ class ItemOwnedByUser(serializers.ModelSerializer):
         read_only=True
     )
 
+class ItemCommentedByUser(serializers.ModelSerializer):
     comments = serializers.SlugRelatedField(
         many=True,
         read_only=True,
@@ -27,20 +21,28 @@ class ItemOwnedByUser(serializers.ModelSerializer):
     )
 
 
-class ArticleSerializer(ItemOwnedByUser):
+class ArticleSerializer(ItemOwnedByUser, ItemCommentedByUser):
     class Meta:
         model = Article
         fields = ['id', 'user', 'user_id', 'name', 'article', 'comments']
 
 
-class VideoSerializer(ItemOwnedByUser):
+class VideoSerializer(ItemOwnedByUser, ItemCommentedByUser):
     class Meta:
         model = Video
         fields = ['id', 'user', 'user_id', 'name', 'url', 'comments']
 
 
-class CommentSerializer(serializers.ModelSerializer):
+class CommentSerializer(ItemOwnedByUser):
+    # object_type = serializers.CharField(source='content_type.model')
+    
     class Meta:
         model = Comment
-        fields = ['id', 'user_id', 'comment']
-
+        fields = ['id', 'user', 'user_id', 'content_type', 'object_id', 'comment']
+    
+    # def create(self, validated_data):
+    #     # object_type = validated_data.pop('object_type')
+    #     content_type = validated_data.pop('content_type')
+    #     content_type = ContentType.objects.get(app_label='api', model='article')
+    #     return Comment.objects.create(content_type=content_type, **validated_data)
+    #     # return super().create(validated_data)

@@ -6,6 +6,7 @@ from django.contrib.contenttypes.models import ContentType
 
 from django.contrib.auth.models import User
 
+
 class Article(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(default='', max_length=250)
@@ -35,4 +36,4 @@ class Comment(models.Model):
     commented_object = GenericForeignKey('content_type', 'object_id')
 
     def __str__(self):
-        return self.comment_text
+        return self.comment
