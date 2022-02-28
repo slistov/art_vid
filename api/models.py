@@ -21,6 +21,9 @@ class Article(models.Model):
 
 
 class Video(models.Model):
+    """
+    Модель для сущности Video
+    """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(default='', max_length=250)
     url = models.URLField(default='')
