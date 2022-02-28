@@ -1,1 +1,8 @@
-User writes article, makes video and comments
+Пользователи API создают статьи, регистрируют ссылки на видео с описанием, создают комменты к этим материалам
+
+PDF c ТЗ приложено к проекту
+
+
+Документация
+
+https://go.postman.co/workspace/art_vid~949f89ed-4370-4829-ad84-b7a9ac0454ce/api/135559b0-5a9e-4dee-b0e6-2d85317b2b6a

@@ -8,6 +8,9 @@ from django.contrib.auth.models import User
 
 
 class Article(models.Model):
+    """
+    Модель для сущности Article
+    """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(default='', max_length=250)
     article = models.TextField(default='')
@@ -28,6 +31,9 @@ class Video(models.Model):
 
 
 class Comment(models.Model):
+    """
+    Сущность Comment. Полиморфная связь с Article и Video
+    """
     user = models.ForeignKey(User, on_delete=models.CASCADE)   
     comment = models.TextField('Текст комментария', default='')
 
