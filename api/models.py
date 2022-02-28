@@ -35,8 +35,5 @@ class Comment(models.Model):
     object_id = models.PositiveIntegerField()
     commented_object = GenericForeignKey('content_type', 'object_id')
 
-    def get_object_type(self):
-        return self.content_type.model
-
     def __str__(self):
         return self.comment

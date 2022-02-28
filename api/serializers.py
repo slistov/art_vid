@@ -3,7 +3,6 @@ from api.models import Article, Video, Comment
 from django.contrib.contenttypes.models import ContentType
 
 
-
 class ItemOwnedByUser(serializers.ModelSerializer):
     user = serializers.HiddenField(
         default=serializers.CurrentUserDefault()
@@ -13,39 +12,54 @@ class ItemOwnedByUser(serializers.ModelSerializer):
         read_only=True
     )
 
+    class Meta:
+        fields = ['user', 'user_id']
+
+
+class CommentSimplifiedSerializer(ItemOwnedByUser):
+    
+    class Meta(ItemOwnedByUser.Meta):
+        model = Comment
+        fields = ['id', 'comment'] + ItemOwnedByUser.Meta.fields
+
+
 class ItemCommentedByUser(serializers.ModelSerializer):
-    comments = serializers.SlugRelatedField(
-        many=True,
-        read_only=True,
-        slug_field='comment'
-    )
+    comments = CommentSimplifiedSerializer(many=True)
+
+    class Meta:
+        fields = ['comments']
 
 
 class ArticleSerializer(ItemOwnedByUser, ItemCommentedByUser):
+
     class Meta:
         model = Article
-        fields = ['id', 'user', 'user_id', 'name', 'article', 'comments']
+        fields = (
+            ['id', 'name', 'article'] + 
+            ItemOwnedByUser.Meta.fields + 
+            ItemCommentedByUser.Meta.fields
+        )
+
 
 
 class VideoSerializer(ItemOwnedByUser, ItemCommentedByUser):
     class Meta:
         model = Video
-        fields = ['id', 'user', 'user_id', 'name', 'url', 'comments']
+        fields = (
+            ['id', 'name', 'url'] + 
+            ItemOwnedByUser.Meta.fields + 
+            ItemCommentedByUser.Meta.fields
+        )
 
 
-# class ObjectTypeField(serializers.Field):
-#     def get_attribute(self, instance):
-#         return instance
-#     def to_representation(self, instance):
-#         return instance # ContentType(self).model
+class CommentSerializer(CommentSimplifiedSerializer):
 
-class CommentSerializer(ItemOwnedByUser):
-
-    class Meta:
-        model = Comment
-        fields = '__all__' 
-        # ['id', 'user', 'user_id', 'object_type', 'content_type', 'object_id', 'comment']
-
+    class Meta(CommentSimplifiedSerializer.Meta):
+        fields = CommentSimplifiedSerializer.Meta.fields + [
+            'object_id',
+            'content_type'
+        ]
+    
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         content_type_id = representation.pop('content_type')
