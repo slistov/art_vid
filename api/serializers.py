@@ -33,15 +33,28 @@ class VideoSerializer(ItemOwnedByUser, ItemCommentedByUser):
         fields = ['id', 'user', 'user_id', 'name', 'url', 'comments']
 
 
-class ObjectTypeField(serializers.Field):
-    def get_attribute(self, instance):
-        return 'get attrib'
-    def to_representation(self, instance):
-        return instance # ContentType(self).model
+# class ObjectTypeField(serializers.Field):
+#     def get_attribute(self, instance):
+#         return instance
+#     def to_representation(self, instance):
+#         return instance # ContentType(self).model
 
 class CommentSerializer(ItemOwnedByUser):
-    object_type = ObjectTypeField(source='content_type')
 
     class Meta:
         model = Comment
-        fields = ['id', 'user', 'user_id', 'object_type', 'content_type', 'object_id', 'comment']
+        fields = '__all__' 
+        # ['id', 'user', 'user_id', 'object_type', 'content_type', 'object_id', 'comment']
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        content_type_id = representation.pop('content_type')
+        object_type_str = ContentType.objects.get_for_id(content_type_id).model
+        representation['object_type'] = object_type_str
+        return representation
+
+    def to_internal_value(self, data):
+        object_type_str = data.pop('object_type')
+        content_type_id = ContentType.objects.get(model=object_type_str).id
+        data['content_type'] = content_type_id
+        return super().to_internal_value(data)
